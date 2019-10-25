@@ -1,0 +1,305 @@
+Why DOCKER?
+
+An application is working fine on developer console but not in testing or in production.
+
+In Dev there can be a software which is updated but in testing and production an older version is being used.
+
+
+
+Microservice Architecture : 
+
+The idea behind microservice is some application is easier to build and maintain where broken down to smaller parts.
+Each component is developed seperately and done....
+
+Example : Online Shopping Service : 
+	
+								Account Service
+								Product Catalog
+								Cart Server
+								Order Server
+
+Advantages of microservice architecture : 
+
+	- Building and maintainence is easy as broken down to smaller parts.
+	- If we need some new features or update in a module,
+		 it is easier because dependencies will be less compared to the application as a whole.
+	- If any component go down, application will be largely unaffected.
+
+What is the problem to adopting microservices :
+
+Before DOCKER : For microservice architecture we have a host machine and there are several virtual machines 
+				each virtual machine is for a microservice. So problem is that lots of resource waste.
+				As we use more and more VMs for bigger application lots of disc space, RAM are unused.
+
+How Docker solve this problem :
+
+			    We can run several microservices in one virtual machine by running various docker
+			    containers for each microservice.
+			    Docker do not need any RAM,DISK requirments initially.
+
+How Docker solves the problem "not having consistent computing environment throughout the process of delivery (developement, testing, production)" :
+
+				Docker containers are developed by the developers.
+				Docker provides a consistent computing environment throughout the whole SDLC (Software Developement Life Cycle).
+
+
+
+
+
+
+		
+What is a container?
+
+	A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.
+
+	A docker container image is s lightweight, standalone, executable package of software that includes everything needed to run an application: code, libraries, settings etc.
+
+	Container images become containers at runtime and in the case of docker containers images become containers when they run on docker engine.
+
+	Containers share the machine's OS system kernel and therefore do not require an OS per application.
+
+	Applications are safer in containers and Docker provides the strongest default isolation capabilities in the industry.
+
+
+
+
+
+
+
+DOCKER
+
+Introduction to Docker:
+
+	Docker is a computer program that performs operating-system-level virtualization, also known as "containerization".
+	Containers could be as low as 50MB.
+	Docker is a tool which helps to containerization of an application.
+
+	Basic Design:
+
+		Hardware --> Operating System --> Container Engine --> Bins/Libs --> App1
+														   --> Bins/Libs --> App2
+														   --> Bins/Libs --> App3
+
+
+	Installation on ubuntu:
+
+			sudo apt-get update
+			sudo apt-get install docker.io
+
+
+	Docker container lifecycle:
+
+		Processes:
+
+			pull and image from Docker hub into a system where docker engine is installed.
+			whatever we downloaded from Docker hub is an image of a container.
+			Run the image. (The moment we run the image it becomes container)
+			Can run,stop,delete
+
+
+
+Common Docker Commands:
+
+	docker --version  // Gives the installed docker version and build
+
+	sudo docker pull ubuntu // Pull an image of ubuntu from Docker hub.
+
+	sudo docker images // Show the images downloaded in machine
+
+	sudo docker run -it -d ubuntu //Run the image ubuntu
+
+				// -it will make interative
+				// -d will make it a daemon process so that it can run in background until we stop
+
+	sudo docker ps // Will show all the running container
+
+	sudo docker stop 7a2206c00254 // will stop the container with specified id.
+
+	sudo docker ps -a // Will show all the container running or stop
+
+	sudo docker exec -it 740eda1d5575 bash // To use the container from same terminal
+
+				// -it will make it interactive
+				// next field is id of the container
+				// bash specifies that open in terminal
+
+	exit // Will return to the working system
+
+			// But the container is still running
+
+	sudo docker rm 740eda1d5575 // Will permanently remove the container from stop stage
+
+	sudo docker rmi a2a15febcdf3 // Will remove the docker image with specified id from the main system permanrntly
+
+
+
+
+Docker Files
+
+	A Docker file is a text document that contains all the commands a user could call on the command line to assemble an image.
+
+
+What are Docker Volumes
+
+	Docker Volumes are used to persist data across the lifetime of a container.
+
+	
+Break Monolethic Application (Microservices)
+
+
+
+
+What is Docker Compose
+
+
+
+
+What is Container Orchestration
+
+
+
+
+Deploy application using Docker Swarm
+
+
+
+
+
+
+Extra : 
+
+
+																		Any container in the same POD will share the same resources and
+																								 local network
+																									   |
+													Basic Opearational Unit in Kubernetes              |
+																	   |							   |	
+																	   |		 ______________________|________________________
+				Smallest unit of computing hardware in Kubernetes 	   |		|												|
+										|							   |		|												|		
+										|							   |		|		Basic Unit for Docker                   |
+										|							   |		|				   |							|
+Kubernetes Cluster____________________Node1___________________________Pod1______|_____________Container1						|	
+		|					|									|				|	|											|
+		|					|									|				|	|											|
+		|					|_________Node2____ CPU: 3000		|_____Pod2		|	|_________Container2						|
+	CPU: 40000				|					RAM: 64Gb		|				|	|											|
+	RAM: 320Gb				|									|				|	|											|
+							|_________Node3						|_____Pod3		|	|_________Container3						|
+										|								|		|				   |							|
+										|								|		|				   |							|
+										|								|		|				   |							|
+							Single Machine in the cluster 				|		|  Kubernetes doesn't run Containers directly	|
+							A server or Virtual Machine                 |       |												|
+																		|		|												|
+																		|		|												|
+																		|		|_______________________________________________|
+																		|							|
+																		|							|	
+																		|							|
+																		|			Kubernetes wraps one or more containers
+																		|				 into a higher level structure
+																		|						called a POD
+																		|
+																		|
+																		|
+												Although PODs are basic unit of computation in Kubernetes
+												They are not typically directly launched on a cluster.
+												Instead, PODs are usually managed by one more layer of 
+															Abstraction : the Deployment
+																		|
+																		|
+																		|
+												Primary purpose of Deployment is to declare how many replicas
+															of a POD should be running at a time.
+
+
+
+
+Extras:
+
+
+
+
+
+
+
+
+docker swarm init
+
+
+
+//getstartedlab is the app name (given)
+docker stack deploy -c docker-compose.yml getstartedlab
+
+
+
+docker service ls
+
+
+
+//List the replicas with id
+docker service ps getstartedlab_web
+
+
+
+//Take the app down
+docker stack rm getstartedlab
+
+
+
+//Take down the swarm
+docker swarm leave --force
+
+
+
+docker node ls
+
+
+
+//For setup several virtual machines in pc : docker - manager
+
+
+
+docker-machine create --driver virtualbox myvm1 # Create a VM (Mac, Win7, Linux)
+docker-machine create -d hyperv --hyperv-virtual-switch "myswitch" myvm1 # Win10
+docker-machine env myvm1                # View basic information about your node
+docker-machine ssh myvm1 "docker node ls"         # List the nodes in your swarm
+docker-machine ssh myvm1 "docker node inspect <node ID>"        # Inspect a node
+docker-machine ssh myvm1 "docker swarm join-token -q worker"   # View join token
+docker-machine ssh myvm1   # Open an SSH session with the VM; type "exit" to end
+docker node ls                # View nodes in swarm (while logged on to manager)
+docker-machine ssh myvm2 "docker swarm leave"  # Make the worker leave the swarm
+docker-machine ssh myvm1 "docker swarm leave -f" # Make master leave, kill swarm
+docker-machine ls # list VMs, asterisk shows which VM this shell is talking to
+docker-machine start myvm1            # Start a VM that is currently not running
+docker-machine env myvm1      # show environment variables and command for myvm1
+eval $(docker-machine env myvm1)         # Mac command to connect shell to myvm1
+& "C:\Program Files\Docker\Docker\Resources\bin\docker-machine.exe" env myvm1 | Invoke-Expression   # Windows command to connect shell to myvm1
+docker stack deploy -c <file> <app>  # Deploy an app; command shell must be set to talk to manager (myvm1), uses local Compose file
+docker-machine scp docker-compose.yml myvm1:~ # Copy file to node's home dir (only required if you use ssh to connect to manager and deploy the app)
+docker-machine ssh myvm1 "docker stack deploy -c <file> <app>"   # Deploy an app using ssh (you must have first copied the Compose file to myvm1)
+eval $(docker-machine env -u)     # Disconnect shell from VMs, use native docker
+docker-machine stop $(docker-machine ls -q)               # Stop all running VMs
+docker-machine rm $(docker-machine ls -q) # Delete all VMs and their disk images
+
+
+
+//
+
+
+
+
+By default docker provides two network drivers.
+
+	bridge
+	overlay
+
+//Own network driver can be created.
+
+
+By default docker uses bridge network.
+
+
+
+
